@@ -12,3 +12,4 @@ class LoginForm(FlaskForm):
     username = StringField(id='username', validators=[DataRequired(), Length(1, 64)])
     password = PasswordField(id='password', validators=[DataRequired(), Length(5, 64)])
     submit = SubmitField(id='login_btn', label='登 录') # 貌似没啥用啊这东西
+

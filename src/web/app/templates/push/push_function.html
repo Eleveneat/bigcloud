@@ -19,15 +19,184 @@
             <div class="widget-head am-cf">
                 <div class="widget-title am-fl">应用功能分类</div>
                 <div class="widget-function am-fr">
-                    <a href="javascript:;" class="am-icon-cog"></a>
+                    <button type="button" id="add-function-btn" class="am-btn am-btn-success am-btn-xs am-radius">
+                        <i class="am-icon-plus"></i>新增功能类别
+                    </button>
                 </div>
             </div>
             <div class="widget-body am-fr">
-                <div style="height: 400px" class="" id="tpl-echarts-A">
-                    插个表
+                <div style="min-height: 400px;width: 98%;margin: auto" class="" id="tpl-echarts-A">
+                    <table width="100%" id="function-table"
+                           class="am-table am-table-compact am-table-striped tpl-table-black am-text-nowrap">
+                        <thead>
+                        <tr>
+                            <th class="id">功能编号</th>
+                            <th class="name">功能名称</th>
+                            <th class="first_classification">一级分类</th>
+                            <th class="secondary_classification">二级分类</th>
+                            <th class="remark">备注</th>
+                            <th class="operation">操作</th>
+                        </tr>
+                        </thead>
+                    </table>
                 </div>
             </div>
         </div>
     </div>
-
 {% endblock content_body %}
+{% block custom_modal %}
+<!--添加应用功能-->
+    <div class="am-modal am-modal-prompt" tabindex="-1" id="add-function-modal">
+        <div class="am-modal-dialog">
+            <div class="am-modal-hd">
+                <h1>新增功能类别</h1>
+                <a href="javascript: void(0)" class="am-close am-close-spin" data-am-modal-close>&times;</a>
+            </div>
+            <div class="am-modal-bd">
+                <div class="am-modal-bd">
+                <form id="add-function-form" class="am-form am-form-horizontal" data-am-validator
+                      method="post" action="api/funtion">
+                    <div class="am-form-group">
+                    <label for="doc-vld-id-2" class="am-u-sm-3 am-form-label">功能编号</label>
+                     <div class="am-u-sm-9">
+                    <input type="text" id="id" minlength="3" placeholder="输入功能编号" required/>
+                    </div>
+                    </div>
+
+                    <div class="am-form-group">
+                    <label for="doc-vld-name-2" class="am-u-sm-3 am-form-label">功能名称</label>
+                        <div class="am-u-sm-9">
+                    <input type="text" id="name" minlength="3" placeholder="输入功能名称" required/>
+                    </div>
+                    </div>
+
+{#                    <div class="am-form-group">#}
+{##}
+{#                       <label for="doc-select-1" class="am-u-sm-3 am-form-label">一级分类</label>#}
+{#                        <div class="am-u-sm-9">#}
+{#                        <select id="first_id" name="first_id" placeholder="请选择">#}
+{#                                <option value=""></option>#}
+{#                                {% for first in first_list %}#}
+{#                                    <option value="{{ first.id }}">{{ first.name }}</option>#}
+{#                                {% endfor %}#}
+{#                            </select>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                        <div class="am-form-group">#}
+{#                        <label for="doc-select-1" class="chzn-select am-u-sm-3 am-form-label">二级分类</label>#}
+{#                        <div class="am-u-sm-9">#}
+{#                        <select id="secondary_id" name="secondary_id" placeholder="请选择">#}
+{#                             <option value=""></option>#}
+{#                            {% for second in second_list %}#}
+{#                                <option value="{{ second.id }}">{{ second.name }}</option>#}
+{#                            {% endfor %}#}
+{#                         </select>#}
+{#                        </div>#}
+{#                        </div>#}
+                     <div class="am-form-group">
+                        <!--<div class="am-u-sm-10 am-u-sm-offset-2">-->
+                        <div>
+                            <button id="add-form-submit-button" type="" class="am-btn am-btn-success">添加</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    </div>
+    <!--添加功能错误的Modal-->
+    <div class="am-modal am-modal-alert" tabindex="-1" id="add-error-modal">
+        <div class="am-modal-dialog">
+            <div class="am-modal-hd">错误</div>
+            <div class="am-modal-bd">
+                添加功能失败！
+            </div>
+            <div class="am-modal-footer">
+                <span class="am-modal-btn">确定</span>
+            </div>
+        </div>
+    </div>
+{% endblock custom_modal %}
+{% block custom_script %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/amazeui.switch.css') }}"/>
+    <script src="{{ url_for('static', filename='js/amazeui.switch.min.js') }}"></script>
+
+    <script>
+
+        (function () {
+            var table = $('#function-table').DataTable({
+                responsive: true,
+                "lengthChange": false,
+                "ajax": "api/function",
+                "oLanguage": {// 汉化
+                    "sLengthMenu": "",
+                    "sZeroRecords": "",
+                    "sSearch": "", // TODO 不知道为什么搜索框前面有文字的话，样式会换行，特别不好看。后期优化。
+                },
+                "columns": [
+                    {"data":"id"},
+                    {"data": "name"},
+                    {"data": "first_classification"},
+                    {"data": "secondary_classification"},
+                    {"data": "remark"},
+                    {"data": "operation"}
+                ],
+                "columnDefs": [{
+                    "targets": "nosort",
+                    "orderable": false,
+                },{
+                    "targets": "remark",
+                    "data": "三级分类",
+                    "defaultContent": "三级分类",
+                },{
+                    "targets": "operation",
+                    "data": null,
+                    "defaultContent": '<button class="am-btn am-btn-primary am-btn-xs am-radius edit-user-button" style="margin-right:10px"><i class="am-icon-edit"></i></button>' +
+                    '<button class="am-btn am-btn-danger am-btn-xs am-radius delete-user-button"><i class="am-icon-trash"></i></button>',
+                }
+                ],
+            })
+            //添加[创建功能]按钮,弹出[添加功能]modal
+            $('#add-function-btn').on('click', function () {
+                $('#add-function-modal').modal();
+            });
+            // 「添加功能Modal」窗口完全关闭的事件：清空「添加功能」表单数据和重置验证。
+            $('#add-function-modal').on('closed.modal.amui', function () {
+                // 清空表单数据。
+                $("#add-function-form").get(0).reset();
+
+                // 重置表单验证。
+                $("#add-function-form").validator('destroy');
+                $("#add-function-form").validator();
+            });
+            //提交[创建功能]表单
+            $('#add-function-form').submit(function (e) {
+                $(this).ajaxSubmit({
+                    // 提交前的回调函数：用于判断表单验证是否通过。
+                    beforeSubmit: function (formData, jqForm, options) {
+                        var formValidity = $('#add-function-form').validator('isFormValid');
+                        if (formValidity) {
+                            $('#add-function-modal').modal('close');
+                            return true;
+                        }
+                        return false;
+                    },
+                    // 提交后的回调函数
+                    success: function (responseObject, statusText) {
+                        if (responseObject['result']) {
+                            table.ajax.reload();
+                        } else {
+                            $("#add-error-modal").modal({closeViaDimmer: 0});
+                            console.log(responseObject['message']); // TODO 便于调试的错误信息，后期应删掉
+                        }
+                    },
+                    url: "api/function",
+                    type: "post",
+                    dataType: "json"
+                });
+
+                return false;
+            });
+            }());
+    </script>
+{% endblock custom_script %}
