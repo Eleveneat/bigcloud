@@ -15,7 +15,7 @@ TODO 优化方案
                 <div class="page-header-heading"><span class="am-icon-files-o page-header-heading-icon"></span> 文件组
                     <small>上传文件</small>
                 </div>
-                <p class="page-header-description">上传完毕后，可以进行<a href="{{ url_for('file.filegroup') }}">文件组管理</a>。
+                <p class="page-header-description">上传完毕后，可以进行<a href="{{ url_for('file.file_filegroup') }}">文件组管理</a>。
                 </p>
             </div>
         </div>
@@ -33,13 +33,13 @@ TODO 优化方案
                             <i class="am-icon-plus"></i> 上传文件
                         </button>
                         <input id="fileupload" type="file" name="upload_file"
-                               data-url="{{ url_for('push.upload_package') }}" multiple>
+                               data-url="{{ url_for('file.upload_file') }}" multiple>
                     </div>
                 </div>
             </div>
             <div class="widget-body am-fr">
                 <div style="min-height: 400px;width: 98%;margin: auto" class="">
-                    <table width="100%" id="package-table"
+                    <table width="100%" id="file-table"
                            class="am-table am-table-compact am-table-striped tpl-table-black am-text-nowrap">
                         <thead>
                         <tr>
@@ -109,11 +109,11 @@ TODO 优化方案
     <script>
         (function () {
             // 初始化「小云白名单」表格。
-            var table = $('#package-table').DataTable({
+            var table = $('#file-table').DataTable({
                 responsive: true,
                 "lengthChange": false,
                 "order": [[0, 'asc']],
-                "ajax": "api/package",
+                "ajax": "api/file",
                 "oLanguage": {
                     "sLengthMenu": "每页显示 _MENU_ 条记录",
                     "sZeroRecords": "没有检索到数据",
@@ -140,11 +140,11 @@ TODO 优化方案
                 }, {
                     "targets": "operation",
                     "data": null,
-                    "defaultContent": '<button class="am-btn am-btn-danger am-btn-xs am-radius delete-package-button"><i class="am-icon-trash"></i></button>',
+                    "defaultContent": '<button class="am-btn am-btn-danger am-btn-xs am-radius delete-file-button"><i class="am-icon-trash"></i></button>',
                 }],
                 "drawCallback": function () {
                     // 往「删除按钮」注册点击事件：渲染出删除Modal。
-                    $(".delete-package-button").on('click', function () {
+                    $(".delete-file-button").on('click', function () {
                         $('#confirm-delete-modal').modal({
                             relatedTarget: this,
                             onConfirm: function (options) {
@@ -159,11 +159,10 @@ TODO 优化方案
                 },
             });
 
-            console.log(2);
 
             // 根据ID删除安装包的函数：用Ajax来发送DELETE请求。
             function deletePackageById(id) {
-                var url = "api/package/" + id.toString();
+                var url = "api/file/" + id.toString();
                 $.ajax({
                     url: url,
                     type: 'DELETE',

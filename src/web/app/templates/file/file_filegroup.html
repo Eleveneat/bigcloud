@@ -26,20 +26,20 @@ TODO 优化方案
             <div class="widget-head am-cf">
                 <div class="widget-title am-fl">文件组列表</div>
                 <div class="widget-function am-fr">
-                    <button type="button" id="add-appgroup-btn" class="am-btn am-btn-success am-btn-xs am-radius">
+                    <button type="button" id="add-filegroup-btn" class="am-btn am-btn-success am-btn-xs am-radius">
                         <i class="am-icon-plus"></i>添加文件组
                     </button>
                 </div>
             </div>
             <div class="widget-body am-fr">
                 <div style="min-height: 400px;width: 98%;margin: auto">
-                    <table width="100%" id="appgroup-table"
+                    <table width="100%" id="filegroup-table"
                            class="am-table am-table-compact am-table-striped tpl-table-black am-text-nowrap">
                         <thead>
                         <tr>
                             <th class="name">文件组名称</th>
                             <th class="description nosort">描述</th>
-                            <th class="apps">所含文件</th>
+                            <th class="files">所含文件</th>
                             <th class="operation nosort">操作</th>
                         </tr>
                         </thead>
@@ -52,14 +52,14 @@ TODO 优化方案
 
 {% block custom_modal %}
     <!--添加文件组的Modal-->
-    <div class="am-modal am-modal-no-btn" tabindex="-1" id="add-appgroup-modal">
+    <div class="am-modal am-modal-no-btn" tabindex="-1" id="add-filegroup-modal">
         <div class="am-modal-dialog">
             <div class="am-modal-hd">
                 <h1>添加文件组</h1>
                 <a href="javascript: void(0)" class="am-close am-close-spin" data-am-modal-close>&times;</a>
             </div>
             <div class="am-modal-bd">
-                <form id="add-appgroup-form" class="am-form am-form-horizontal" data-am-validator>
+                <form id="add-filegroup-form" class="am-form am-form-horizontal" data-am-validator>
                     <div class="am-form-group">
                         <label for="add-form-name" class="am-u-sm-2 am-form-label">组名称</label>
                         <div class="am-u-sm-10">
@@ -77,9 +77,9 @@ TODO 优化方案
                     </div>
 
                     <div class="am-form-group">
-                        <label for="add-form-apps" class="am-u-sm-2 am-form-label">所含文件</label>
+                        <label for="add-form-files" class="am-u-sm-2 am-form-label">所含文件</label>
                         <div class="am-u-sm-10">
-                            <select id="add-form-apps" name="apps" multiple data-placeholder="请选择">
+                            <select id="add-form-files" name="files" multiple data-placeholder="请选择">
                             </select>
                         </div>
                         <span class="am-form-caret"></span>
@@ -96,14 +96,14 @@ TODO 优化方案
     </div>
 
     <!--编辑文件组的Modal-->
-    <div class="am-modal am-modal-no-btn" tabindex="-1" id="edit-appgroup-modal">
+    <div class="am-modal am-modal-no-btn" tabindex="-1" id="edit-filegroup-modal">
         <div class="am-modal-dialog">
             <div class="am-modal-hd">
                 <h1>编辑文件组</h1>
                 <a href="javascript: void(0)" class="am-close am-close-spin" data-am-modal-close>&times;</a>
             </div>
             <div class="am-modal-bd">
-                <form id="edit-appgroup-form" class="am-form am-form-horizontal" data-am-validator>
+                <form id="edit-filegroup-form" class="am-form am-form-horizontal" data-am-validator>
                     <input type="number" id="edit-form-id" style="display: none;">
 
                     <div class="am-form-group">
@@ -124,9 +124,9 @@ TODO 优化方案
                     </div>
 
                     <div class="am-form-group">
-                        <label for="edit-form-apps" class="am-u-sm-2 am-form-label">所含文件</label>
+                        <label for="edit-form-files" class="am-u-sm-2 am-form-label">所含文件</label>
                         <div class="am-u-sm-10">
-                            <select id="edit-form-apps" name="apps" multiple data-placeholder="请选择">
+                            <select id="edit-form-files" name="files" multiple data-placeholder="请选择">
                             </select>
                         </div>
                         <span class="am-form-caret"></span>
@@ -206,11 +206,11 @@ TODO 优化方案
             initSelectData();
 
             // 初始化「应用组」表格。
-            var table = $('#appgroup-table').DataTable({
+            var table = $('#filegroup-table').DataTable({
                 responsive: true,
                 "lengthChange": false,
                 "order": [[0, 'asc']],
-                "ajax": "api/appgroup",
+                "ajax": "api/filegroup",
                 "oLanguage": {
                     "sLengthMenu": "每页显示 _MENU_ 条记录",
                     "sZeroRecords": "没有检索到数据",
@@ -219,17 +219,17 @@ TODO 优化方案
                 "columns": [
                     {"data": "name"},
                     {"data": "description"},
-                    {"data": "apps"},
+                    {"data": "files"},
                     {"data": "operation"},
                 ],
                 "createdRow": function (row, data, index) {
-                    var apps = data["apps"];
-                    var appsTemplate = "";
-                    for (var i = 0; i < apps.length; i++) {
-                        var app = apps[i];
-                        appsTemplate += "<span class='am-badge am-badge-warning am-radius' style='margin-right:10px'>{0}</span>".format(app.name);
+                    var files = data["files"];
+                    var filesTemplate = "";
+                    for (var i = 0; i < files.length; i++) {
+                        var file = files[i];
+                        filesTemplate += "<span class='am-badge am-badge-warning am-radius' style='margin-right:10px'>{0}</span>".format(file.name);
                     }
-                    $('td', row).eq(2).html(appsTemplate);
+                    $('td', row).eq(2).html(filesTemplate);
                 },
                 "columnDefs": [{
                     "targets": "nosort",
@@ -237,12 +237,12 @@ TODO 优化方案
                 }, {
                     "targets": "operation",
                     "data": null,
-                    "defaultContent": '<button class="am-btn am-btn-primary am-btn-xs am-radius edit-appgroup-button" style="margin-right:10px"><i class="am-icon-edit"></i></button>' +
-                    '<button class="am-btn am-btn-danger am-btn-xs am-radius delete-appgroup-button"><i class="am-icon-trash"></i></button>',
+                    "defaultContent": '<button class="am-btn am-btn-primary am-btn-xs am-radius edit-filegroup-button" style="margin-right:10px"><i class="am-icon-edit"></i></button>' +
+                    '<button class="am-btn am-btn-danger am-btn-xs am-radius delete-filegroup-button"><i class="am-icon-trash"></i></button>',
                 }],
                 "drawCallback": function () {
                     // 往「删除按钮」注册点击事件：渲染出删除Modal。
-                    $(".delete-appgroup-button").on('click', function () {
+                    $(".delete-filegroup-button").on('click', function () {
                         $('#confirm-delete-modal').modal({
                             relatedTarget: this,
                             onConfirm: function (options) {
@@ -250,7 +250,7 @@ TODO 优化方案
                                 var tr = $link.closest('tr');
                                 var row = table.row(tr);
                                 var rowData = row.data();
-                                var url = "api/appgroup/" + rowData.id.toString();
+                                var url = "api/filegroup/" + rowData.id.toString();
                                 $.ajax({
                                     url: url,
                                     type: 'DELETE',
@@ -268,59 +268,59 @@ TODO 优化方案
                     });
 
                     // 往「编辑按钮」注册点击事件：渲染出编辑Modal。
-                    $(".edit-appgroup-button").on('click', function () {
+                    $(".edit-filegroup-button").on('click', function () {
                         var tr = this.closest('tr');
                         var row = table.row(tr);
                         var rowData = row.data();
-                        var apps = rowData.apps;
-                        var appsList = [];
-                        for (var i = 0; i < apps.length; i++) {
-                            appsList.push(apps[i].id);
+                        var files = rowData.files;
+                        var filesList = [];
+                        for (var i = 0; i < files.length; i++) {
+                            filesList.push(files[i].id);
                         }
 
                         // 清空表单数据。
-                        $("#edit-appgroup-form").get(0).reset();
-                        $("#edit-form-apps").trigger('chosen:updated');
+                        $("#edit-filegroup-form").get(0).reset();
+                        $("#edit-form-files").trigger('chosen:updated');
 
                         // 覆盖表单数据。
                         $("#edit-form-id").val(rowData.id);
                         $("#edit-form-name").val(rowData.name);
                         $("#edit-form-description").val(rowData.description);
-                        $("#edit-form-apps").val(appsList).trigger('chosen:updated');
+                        $("#edit-form-files").val(filesList).trigger('chosen:updated');
 
                         // 渲染编辑modal。
-                        $('#edit-appgroup-modal').modal();
+                        $('#edit-filegroup-modal').modal();
 
                         // 激活表单验证样式（渲染出modal后激活才有效果）。
-                        var isFormValid = $('#edit-appgroup-form').validator('isFormValid');
+                        var isFormValid = $('#edit-filegroup-form').validator('isFormValid');
                     });
                 },
             });
 
-            // 「添加应用组按钮」的点击事件：弹出「添加应用组」Modal。
-            $('#add-appgroup-btn').on('click', function () {
-                $('#add-appgroup-modal').modal();
+            // 「添加文件组按钮」的点击事件：弹出「添加文件组」Modal。
+            $('#add-filegroup-btn').on('click', function () {
+                $('#add-filegroup-modal').modal();
             });
 
-            // 「添加应用组Modal」窗口完全关闭的事件：清空「添加应用组」表单数据和重置验证。
-            $('#add-appgroup-modal').on('closed.modal.amui', function () {
+            // 「添加文件组Modal」窗口完全关闭的事件：清空「添加文件组」表单数据和重置验证。
+            $('#add-filegroup-modal').on('closed.modal.amui', function () {
                 // 清空表单数据。
-                $("#add-appgroup-form").get(0).reset();
-                $("#add-form-apps").trigger('chosen:updated');
+                $("#add-filegroup-form").get(0).reset();
+                $("#add-form-files").trigger('chosen:updated');
 
                 // 重置表单验证。
-                $("#add-appgroup-form").validator('destroy');
-                $("#add-appgroup-form").validator();
+                $("#add-filegroup-form").validator('destroy');
+                $("#add-filegroup-form").validator();
             });
 
-            // 「添加应用组表单」的提交方法：采用异步提交的方式。
-            $('#add-appgroup-form').submit(function (e) {
+            // 「添加文件组表单」的提交方法：采用异步提交的方式。
+            $('#add-filegroup-form').submit(function (e) {
                 $(this).ajaxSubmit({
                     // 提交前的回调函数：用于判断表单验证是否通过。
                     beforeSubmit: function (formData, jqForm, options) {
-                        var formValidity = $('#add-appgroup-form').validator('isFormValid');
+                        var formValidity = $('#add-filegroup-form').validator('isFormValid');
                         if (formValidity) {
-                            $('#add-appgroup-modal').modal('close');
+                            $('#add-filegroup-modal').modal('close');
                             return true;
                         }
                         return false;
@@ -328,12 +328,12 @@ TODO 优化方案
                     // 提交后的回调函数
                     success: function (responseObject, statusText) {
                         if (responseObject['result']) {
-                            $('#appgroup-table').DataTable().ajax.reload();
+                            $('#filegroup-table').DataTable().ajax.reload();
                         } else {
                             $("#add-error-modal").modal({closeViaDimmer: 0});
                         }
                     },
-                    url: "api/appgroup",
+                    url: "api/filegroup",
                     type: "post",
                     dataType: "json"
                 });
@@ -341,17 +341,17 @@ TODO 优化方案
                 return false;
             });
 
-            // 「编辑应用组表单」的提交方法：采用异步提交的方式。
-            $('#edit-appgroup-form').submit(function (e) {
+            // 「编辑文件组表单」的提交方法：采用异步提交的方式。
+            $('#edit-filegroup-form').submit(function (e) {
                 var id = $("#edit-form-id").val();
-                var url = "api/appgroup/" + id.toString();
+                var url = "api/filegroup/" + id.toString();
 
                 $(this).ajaxSubmit({
                     // 提交前的回调函数：用于判断表单验证是否通过。
                     beforeSubmit: function (formData, jqForm, options) {
-                        var formValidity = $('#edit-appgroup-form').validator('isFormValid');
+                        var formValidity = $('#edit-filegroup-form').validator('isFormValid');
                         if (formValidity) {
-                            $('#edit-appgroup-modal').modal('close');
+                            $('#edit-filegroup-modal').modal('close');
                             return true;
                         }
                         return false;
@@ -359,7 +359,7 @@ TODO 优化方案
                     // 提交后的回调函数
                     success: function (responseObject, statusText) {
                         if (responseObject['result']) {
-                            $('#appgroup-table').DataTable().ajax.reload();
+                            $('#filegroup-table').DataTable().ajax.reload();
                         } else {
                             $("#edit-error-modal").modal({closeViaDimmer: 0});
                         }
@@ -376,24 +376,24 @@ TODO 优化方案
 
         // 初始化下拉框数据。
         function initSelectData() {
-            initApps();
+            initFiles();
         }
 
-        // 初始化所含应用下拉框。
-        function initApps() {
+        // 初始化所含文件下拉框。
+        function initFiles() {
             $.ajax({
-                url: 'api/application',
+                url: 'api/file',
                 type: 'GET',
                 dataType: 'json',
                 success: function (res, textStatus, jqXHR) {
                     if (res["result"]) {
                         var data = res["data"];
-                        var $addSelected = $("#add-form-apps");
-                        var $editSelected = $("#edit-form-apps");
+                        var $addSelected = $("#add-form-files");
+                        var $editSelected = $("#edit-form-files");
                         for (var i = 0; i < data.length; i++) {
-                            var app = data[i];
-                            $addSelected.append('<option value="' + app.id + '">' + app.name + '</option>');
-                            $editSelected.append('<option value="' + app.id + '">' + app.name + '</option>');
+                            var file = data[i];
+                            $addSelected.append('<option value="' + file.id + '">' + file.filename + '</option>');
+                            $editSelected.append('<option value="' + file.id + '">' + file.filename + '</option>');
                         }
                         $addSelected.chosen({width: "100%"});
                         $editSelected.chosen({width: "100%"});

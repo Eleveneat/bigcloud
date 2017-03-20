@@ -255,14 +255,14 @@
                 </a>
                 <ul class="sidebar-nav sidebar-nav-sub am-collapse am-in">
                     <li class="sidebar-nav-link">
-                        <a href="{{ url_for('file.filegroup') }}"
+                        <a href="{{ url_for('file.file_filegroup') }}"
                            class="{{ 'sub-active' if request.path.startswith('/file/filegroup') else '' }}">
                             <span class="am-icon-angle-right sidebar-nav-link-logo"></span> 管理文件组
                         </a>
                     </li>
 
                     <li class="sidebar-nav-link">
-                        <a href="{{ url_for('file.upload') }}"
+                        <a href="{{ url_for('file.file_upload') }}"
                            class="{{ 'sub-active' if request.path.startswith('/file/upload') else '' }}">
                             <span class="am-icon-angle-right sidebar-nav-link-logo"></span> 上传文件
                         </a>
