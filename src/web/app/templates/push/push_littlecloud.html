@@ -12,7 +12,7 @@ TODO 优化方案
                 <div class="page-header-heading"><span class="am-icon-mixcloud page-header-heading-icon"></span> 云推送
                     <small>推送小云</small>
                 </div>
-                <p class="page-header-description">添加应用组到小云。已接入的小云会自动同步应用组数据。</p>
+                <p class="page-header-description">添加应用组和文件组到小云。已接入的小云会自动同步应用组和文件组数据。</p>
             </div>
         </div>
     </div>
@@ -37,6 +37,7 @@ TODO 优化方案
                             <th class="name">小云名称</th>
                             <th class="is_connected">接入状态</th>
                             <th class="groups nosort">所含应用组</th>
+                            <th class="groups nosort">所含文件组</th>
                             <th class="operation nosort">操作</th>
                         </tr>
                         </thead>
@@ -49,11 +50,11 @@ TODO 优化方案
 
 
 {% block custom_modal %}
-    <!--修改应用组的Modal-->
+    <!--修改组的Modal-->
     <div class="am-modal am-modal-no-btn" tabindex="-1" id="edit-appgroup-modal">
         <div class="am-modal-dialog">
             <div class="am-modal-hd">
-                <h1>修改应用组</h1>
+                <h1>修改组</h1>
                 <a href="javascript: void(0)" class="am-close am-close-spin" data-am-modal-close>&times;</a>
             </div>
             <div class="am-modal-bd">
@@ -78,6 +79,15 @@ TODO 优化方案
                     </div>
 
                     <div class="am-form-group">
+                        <label for="edit-form-filegroups" class="am-u-sm-2 am-form-label">文件组</label>
+                        <div class="am-u-sm-10">
+                            <select id="edit-form-filegroups" name="filegroups" multiple data-placeholder="请选择">
+                            </select>
+                        </div>
+                        <span class="am-form-caret"></span>
+                    </div>
+
+                    <div class="am-form-group">
                         <div>
                             <button id="edit-form-submit-button" type="" class="am-btn am-btn-success">提交</button>
                         </div>
@@ -87,12 +97,12 @@ TODO 优化方案
         </div>
     </div>
 
-    <!--修改应用组错误的Modal-->
+    <!--修改组错误的Modal-->
     <div class="am-modal am-modal-alert" tabindex="-1" id="edit-error-modal">
         <div class="am-modal-dialog">
             <div class="am-modal-hd">错误</div>
             <div class="am-modal-bd">
-                编辑应用组失败！
+                编辑组失败！
             </div>
             <div class="am-modal-footer">
                 <span class="am-modal-btn">确定</span>
@@ -125,6 +135,7 @@ TODO 优化方案
                     {"data": "name"},
                     {"data": "is_connected"},
                     {"data": "appgroups"},
+                    {"data": "filegroups"},
                     {"data": "operation"},
                 ],
                 "createdRow": function (row, data, index) {
@@ -141,13 +152,21 @@ TODO 优化方案
                         $('td', row).eq(1).html("<span class='am-badge am-badge-danger am-radius' style='margin-right:10px'>未接入</span>");
                     }
 
-                    var groups = data["appgroups"];
-                    var groupsTemplate = "";
-                    for (var i = 0; i < groups.length; i++) {
-                        var group = groups[i];
-                        groupsTemplate += "<span class='am-badge am-badge-warning am-radius' style='margin-right:10px'>{0}</span>".format(group.name);
+                    var appgroups = data["appgroups"];
+                    var appgroupsTemplate = "";
+                    for (var i = 0; i < appgroups.length; i++) {
+                        var appgroup = appgroups[i];
+                        appgroupsTemplate += "<span class='am-badge am-badge-warning am-radius' style='margin-right:10px'>{0}</span>".format(appgroup.name);
                     }
-                    $('td', row).eq(2).html(groupsTemplate);
+                    $('td', row).eq(2).html(appgroupsTemplate);
+
+                    var filegroups = data["filegroups"];
+                    var filegroupsTemplate = "";
+                    for (var i = 0; i < filegroups.length; i++) {
+                        var filegroup = filegroups[i];
+                        filegroupsTemplate += "<span class='am-badge am-badge-warning am-radius' style='margin-right:10px'>{0}</span>".format(filegroup.name);
+                    }
+                    $('td', row).eq(3).html(filegroupsTemplate);
                 },
                 "columnDefs": [{
                     "targets": "nosort",
@@ -155,7 +174,7 @@ TODO 优化方案
                 }, {
                     "targets": "operation",
                     "data": null,
-                    "defaultContent": '<button class="am-btn am-btn-primary am-btn-xs am-radius edit-appgroup-button" style="margin-right:10px">修改应用组</button>'
+                    "defaultContent": '<button class="am-btn am-btn-primary am-btn-xs am-radius edit-appgroup-button" style="margin-right:10px">修改组</button>'
                 }],
                 "drawCallback": function () {
                     // 往「修改应用组」注册点击事件：渲染出修改Modal。
@@ -163,20 +182,27 @@ TODO 优化方案
                         var tr = this.closest('tr');
                         var row = table.row(tr);
                         var rowData = row.data();
-                        var groups = rowData.appgroups;
-                        var groupsList = [];
-                        for (var i = 0; i < groups.length; i++) {
-                            groupsList.push(groups[i].id);
+                        var appgroups = rowData.appgroups;
+                        var appgroupsList = [];
+                        for (var i = 0; i < appgroups.length; i++) {
+                            appgroupsList.push(appgroups[i].id);
+                        }
+                        var filegroups = rowData.filegroups;
+                        var filegroupsList = [];
+                        for (var j = 0; j < filegroups.length; j++) {
+                            filegroupsList.push(filegroups[j].id);
                         }
 
                         // 清空表单数据。
                         $("#edit-appgroup-form").get(0).reset();
                         $("#edit-form-appgroups").trigger('chosen:updated');
+                        $("#edit-form-filegroups").trigger('chosen:updated');
 
                         // 覆盖表单数据。
                         $("#edit-form-id").val(rowData.id);
                         $("#edit-form-name").val(rowData.name);
-                        $("#edit-form-appgroups").val(groupsList).trigger('chosen:updated');
+                        $("#edit-form-appgroups").val(appgroupsList).trigger('chosen:updated');
+                        $("#edit-form-filegroups").val(filegroupsList).trigger('chosen:updated');
 
                         // 渲染修改modal。
                         $('#edit-appgroup-modal').modal();
@@ -190,13 +216,12 @@ TODO 优化方案
             // 「修改应用组表单」的提交方法：采用异步提交的方式。
             $('#edit-appgroup-form').submit(function (e) {
                 var id = $("#edit-form-id").val();
-                var url = "{{ url_for('connect.index') }}" + "api/littlecloud/" + id.toString() + "/appgroups";
+                var url = "{{ url_for('connect.index') }}" + "api/littlecloud/" + id.toString() + "/groups";
 
                 $(this).ajaxSubmit({
                     // 提交前的回调函数：用于判断表单验证是否通过。
                     beforeSubmit: function (formData, jqForm, options) {
                         var formValidity = $('#edit-appgroup-form').validator('isFormValid');
-                        console.log(formValidity);
                         if (formValidity) {
                             $('#edit-appgroup-modal').modal('close');
                             return true;
@@ -224,6 +249,7 @@ TODO 优化方案
         // 初始化下拉框数据。
         function initSelectData() {
             initApps();
+            initFiles();
         }
 
         // 初始化所含应用组下拉框。
@@ -245,6 +271,27 @@ TODO 优化方案
                 },
             });
         }
+
+        // 初始化所含文件组下拉框。
+        function initFiles() {
+            $.ajax({
+                url: '{{ url_for('file.get_all_filegroups') }}',
+                type: 'GET',
+                dataType: 'json',
+                success: function (res, textStatus, jqXHR) {
+                    if (res["result"]) {
+                        var data = res["data"];
+                        var $editSelected = $("#edit-form-filegroups");
+                        for (var i = 0; i < data.length; i++) {
+                            var group = data[i];
+                            $editSelected.append('<option value="' + group.id + '">' + group.name + '</option>');
+                        }
+                        $editSelected.chosen({width: "100%"});
+                    }
+                },
+            });
+        }
+
     </script>
 {% endblock custom_script %}
 

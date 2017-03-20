@@ -5,9 +5,9 @@
 
 from flask import jsonify, render_template
 from . import connect
-from ..models import LittleCloud, AppGroup
+from ..models import LittleCloud, AppGroup, FileGroup
 from flask_login import login_required, current_user
-from .forms import LittleCloudForm, UpdateAppGroupsForm
+from .forms import LittleCloudForm, UpdateGroupsForm
 from .. import logger
 
 
@@ -31,9 +31,12 @@ def get_all_littleclouds():
     littleclouds = LittleCloud.query.all()
     dic = []
     for i in littleclouds:
-        groups = []
+        appgroups = []
         for a in i.appgroups:
-            groups.append({"id": a.id, "name": a.name})
+            appgroups.append({"id": a.id, "name": a.name})
+        filegroups = []
+        for f in i.filegroups:
+            filegroups.append({"id": f.id, "name": f.name})
         item = {
             "id": i.id,
             "name": i.name,
@@ -45,7 +48,8 @@ def get_all_littleclouds():
             "ip": str(i.ip),
             "port": i.port,
             "protocol": i.protocol,
-            "appgroups": groups,
+            "appgroups": appgroups,
+            "filegroups": filegroups,
         }
         dic.append(item)
     # logger.info("{0} - Get all littleclouds".format(current_user.name))
@@ -190,34 +194,45 @@ def toggle_access_permission_by_id(id):
     return jsonify({"result": False, "data": None, "message": res_message})
 
 
-@connect.route('/api/littlecloud/<int:id>/appgroups', methods=['PUT'])
+@connect.route('/api/littlecloud/<int:id>/groups', methods=['PUT'])
 @login_required
-def update_appgroups_of_littlecloud(id):
+def update_groups_of_littlecloud(id):
     '''
-    【API】更新小云的 AppGroups。
+    【API】更新小云的 AppGroup 以及 FileGroup。
     :param id: 小云 ID
     :return:
     '''
-    form = UpdateAppGroupsForm()
+    form = UpdateGroupsForm()
     if form.validate_on_submit():
         cloud = LittleCloud.query.get(int(id))
         if cloud:
-            groups_id = form.appgroups.raw_data
-            groups = []
-            for gourp_id in groups_id:
-                group = AppGroup.query.get(int(gourp_id))
-                if group:
-                    groups.append(group)
+            appgroups_id = form.appgroups.raw_data
+            appgroups = []
+            for appgourp_id in appgroups_id:
+                appgroup = AppGroup.query.get(int(appgourp_id))
+                if appgroup:
+                    appgroups.append(appgroup)
 
-            cloud.appgroups = groups
+            filegroups_id = form.filegroups.raw_data
+            print(filegroups_id)
+            filegroups = []
+            for filegourp_id in filegroups_id:
+                filegroup = FileGroup.query.get(int(filegourp_id))
+                if filegroup:
+                    filegroups.append(filegroup)
+
+            cloud.appgroups = appgroups
+            cloud.filegroups = filegroups
             cloud.save()
             logger.info(
                 "{0} - Update {1} littlecloud with id {2}".format(current_user.name, cloud.name, cloud.id))
-            return jsonify({"result": True, "data": None, "message": u"Update appgroups of littlecloud successfully"})
+            return jsonify({"result": True, "data": None,
+                            "message": u"Update appgroups and filegroups of littlecloud successfully"})
         res_message = u"Failed! The littlecloud with id %s is not excisted" % id
         logger.error("{0} - {1}".format(current_user.name, res_message))
         return jsonify({"result": False, "data": None, "message": res_message})
 
     error = form.errors
-    logger.error("{0} - Fail to update appgroups of littlecloud because {1}".format(current_user.name, error))
+    logger.error(
+        "{0} - Fail to update appgroups and filegroups of littlecloud because {1}".format(current_user.name, error))
     return jsonify({"result": False, "data": None, "message": error})

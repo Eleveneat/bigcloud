@@ -18,5 +18,6 @@ class LittleCloudForm(FlaskForm):
     phone = IntegerField(id='phone', validators=[DataRequired()])
 
 
-class UpdateAppGroupsForm(FlaskForm):
+class UpdateGroupsForm(FlaskForm):
     appgroups = StringField(id='appgroups', validators=[])
+    filegroups = StringField(id='filegroups', validators=[])

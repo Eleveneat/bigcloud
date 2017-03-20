@@ -532,6 +532,11 @@ LittleCloud_AppGroup = db.Table('littlecloud_appgroup',
                                 db.Column('appgroup_id', db.Integer, db.ForeignKey('appgroups.id'))
                                 )
 
+LittleCloud_FileGroup = db.Table('littlecloud_filegroup',
+                                 db.Column('littlecloud_id', db.Integer, db.ForeignKey('littleclouds.id')),
+                                 db.Column('filegroup_id', db.Integer, db.ForeignKey('filegroups.id'))
+                                 )
+
 
 class LittleCloud(db.Model):
     __tablename__ = 'littleclouds'
@@ -550,6 +555,7 @@ class LittleCloud(db.Model):
     modified_time = db.Column('修改时间', db.DateTime, onupdate=datetime.datetime.now)
 
     appgroups = db.relationship('AppGroup', secondary=LittleCloud_AppGroup, backref=db.backref('LittleCloud'))
+    filegroups = db.relationship('FileGroup', secondary=LittleCloud_FileGroup, backref=db.backref('LittleCloud'))
 
     def __repr__(self):
         return '<LittleCloud %r>' % self.name
