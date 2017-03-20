@@ -12,10 +12,10 @@ TODO 优化方案
     <div class="container-fluid am-cf">
         <div class="row">
             <div class="am-u-sm-12 am-u-md-12 am-u-lg-9">
-                <div class="page-header-heading"><span class="am-icon-inbox page-header-heading-icon"></span> 应用组
-                    <small>上传应用安装包</small>
+                <div class="page-header-heading"><span class="am-icon-files-o page-header-heading-icon"></span> 文件组
+                    <small>上传文件</small>
                 </div>
-                <p class="page-header-description">上传完毕后，还需要<a href="{{ url_for('push.application') }}">注册应用信息</a>。
+                <p class="page-header-description">上传完毕后，可以进行<a href="{{ url_for('file.filegroup') }}">文件组管理</a>。
                 </p>
             </div>
         </div>
@@ -26,11 +26,11 @@ TODO 优化方案
     <div class="row-content am-cf">
         <div class="widget am-cf">
             <div class="widget-head am-cf">
-                <div class="widget-title am-fl">安装包列表</div>
+                <div class="widget-title am-fl">文件列表</div>
                 <div class="widget-function am-fr">
                     <div class="am-form-group am-form-file" style="margin-bottom: 0;">
                         <button type="button" class="am-btn am-btn-success am-btn-xs am-radius">
-                            <i class="am-icon-plus"></i> 上传安装包
+                            <i class="am-icon-plus"></i> 上传文件
                         </button>
                         <input id="fileupload" type="file" name="upload_file"
                                data-url="{{ url_for('push.upload_package') }}" multiple>
@@ -43,7 +43,7 @@ TODO 优化方案
                            class="am-table am-table-compact am-table-striped tpl-table-black am-text-nowrap">
                         <thead>
                         <tr>
-                            <th class="filename">安装包文件名</th>
+                            <th class="filename">文件名</th>
                             <th class="size">大小</th>
                             <th class="md5 nosort">MD5</th>
                             <th class="operation nosort">操作</th>
@@ -57,12 +57,12 @@ TODO 优化方案
 {% endblock content_body %}
 
 {% block custom_modal %}
-    <!--确认删除安装包的Modal-->
+    <!--确认删除文件的Modal-->
     <div class="am-modal am-modal-confirm" tabindex="-1" id="confirm-delete-modal">
         <div class="am-modal-dialog">
             <div class="am-modal-hd">警告</div>
             <div class="am-modal-bd">
-                确定要删除这个安装包吗？
+                确定要删除这个文件吗？
             </div>
             <div class="am-modal-footer">
                 <span class="am-modal-btn" data-am-modal-cancel>取消</span>
@@ -71,12 +71,12 @@ TODO 优化方案
         </div>
     </div>
 
-    <!--删除安装包错误的Modal-->
+    <!--删除文件错误的Modal-->
     <div class="am-modal am-modal-alert" tabindex="-1" id="delete-error-modal">
         <div class="am-modal-dialog">
             <div class="am-modal-hd">错误</div>
             <div class="am-modal-bd">
-                删除安装包失败！
+                删除文件失败！
             </div>
             <div class="am-modal-footer">
                 <span class="am-modal-btn">确定</span>

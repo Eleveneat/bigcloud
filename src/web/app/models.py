@@ -466,6 +466,60 @@ class AppGroup(db.Model):
 
 
 #################
+# file
+#################
+class File(db.Model):
+    __tablename__ = 'files'
+
+    id = db.Column(db.Integer, primary_key=True)
+    filename = db.Column('文件名', db.Unicode(255), unique=True)
+    size = db.Column('文件总大小', db.Integer, default=0)
+    md5 = db.Column('MD5', db.String(255), default='MD5')
+    created_time = db.Column('创建时间', db.DateTime, default=datetime.datetime.now)
+    modified_time = db.Column('修改时间', db.DateTime, onupdate=datetime.datetime.now)
+
+    def __repr__(self):
+        return '<File %r>' % self.filename
+
+    def save(self):
+        db.session.add(self)
+        db.session.commit()
+
+    def delete(self):
+        db.session.delete(self)
+        db.session.commit()
+
+
+FileGroup_File = db.Table('filegroup_file',
+                          db.Column('filegroup_id', db.Integer, db.ForeignKey('filegroups.id')),
+                          db.Column('file_id', db.Integer, db.ForeignKey('files.id'))
+                          )
+
+
+class FileGroup(db.Model):
+    __tablename__ = 'filegroups'
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column('文件组名', db.Unicode(255), unique=True)
+    description = db.Column('描述', db.Unicode(255), unique=True)
+    created_time = db.Column('创建时间', db.DateTime, default=datetime.datetime.now)
+    modified_time = db.Column('修改时间', db.DateTime, onupdate=datetime.datetime.now)
+
+    files = db.relationship('File', secondary=FileGroup_File, backref=db.backref('FileGroup'))
+
+    def __repr__(self):
+        return '<FileGroup %r>' % self.name
+
+    def save(self):
+        db.session.add(self)
+        db.session.commit()
+
+    def delete(self):
+        db.session.delete(self)
+        db.session.commit()
+
+
+#################
 # connect
 #################
 class ProtocolType(object):

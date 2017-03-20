@@ -201,56 +201,22 @@
                     <i class="am-icon-cloud sidebar-nav-link-logo"></i> 云接入
                 </a>
             </li>
+
             <li class="sidebar-nav-link">
-                <a href="javascript:;"
-                   class="sidebar-nav-sub-title {{ 'active' if request.path.startswith('/monitor') else '' }}">
-                    <i class="am-icon-tachometer sidebar-nav-link-logo"></i> 云监控
-                    <span class="am-icon-chevron-up am-fr am-margin-right-sm sidebar-nav-sub-ico"></span>
+                <a href="{{ url_for('push.index') }}"
+                   class="{{ 'active' if request.path.startswith('/push/littlecloud') else '' }}">
+                    <i class="am-icon-mixcloud sidebar-nav-link-logo"></i> 云推送
                 </a>
-                <ul class="sidebar-nav sidebar-nav-sub am-collapse am-in">
-                    <!--<li class="sidebar-nav-link">
-                        <a href="table-list.html">
-                            <span class="am-icon-angle-right sidebar-nav-link-logo"></span> 小云列表
-                        </a>
-                    </li>-->
-
-                    <li class="sidebar-nav-link">
-                        <a href="{{ url_for('monitor.info') }}"
-                           class="{{ 'sub-active' if request.path.startswith('/monitor/info') else '' }}">
-                            <span class="am-icon-angle-right sidebar-nav-link-logo"></span> 监控总览
-                        </a>
-                    </li>
-
-                    <li class="sidebar-nav-link">
-                        <a href="{{ url_for('monitor.channel') }}"
-                           class="{{ 'sub-active' if request.path.startswith('/monitor/channel') else '' }}">
-                            <span class="am-icon-angle-right sidebar-nav-link-logo"></span> 信道监控
-                        </a>
-                    </li>
-
-                    <li class="sidebar-nav-link">
-                        <a href="{{ url_for('monitor.log') }}"
-                           class="{{ 'sub-active' if request.path.startswith('/monitor/log') else '' }}">
-                            <span class="am-icon-angle-right sidebar-nav-link-logo"></span> 日志详情
-                        </a>
-                    </li>
-                </ul>
             </li>
 
+
             <li class="sidebar-nav-link">
                 <a href="javascript:;"
-                   class="sidebar-nav-sub-title {{ 'active' if request.path.startswith('/push') else '' }}">
-                    <i class="am-icon-mixcloud sidebar-nav-link-logo"></i> 云推送
+                   class="sidebar-nav-sub-title {{ 'active' if request.path.startswith('/push') and not request.path.startswith('/push/littlecloud') else '' }}">
+                    <i class="am-icon-inbox sidebar-nav-link-logo"></i> 应用组
                     <span class="am-icon-chevron-up am-fr am-margin-right-sm sidebar-nav-sub-ico"></span>
                 </a>
                 <ul class="sidebar-nav sidebar-nav-sub am-collapse am-in">
-                    <li class="sidebar-nav-link">
-                        <a href="{{ url_for('push.littlecloud') }}"
-                           class="{{ 'sub-active' if request.path.startswith('/push/littlecloud') else '' }}">
-                            <span class="am-icon-angle-right sidebar-nav-link-logo"></span> 推送小云
-                        </a>
-                    </li>
-
                     <li class="sidebar-nav-link">
                         <a href="{{ url_for('push.appgroup') }}"
                            class="{{ 'sub-active' if request.path.startswith('/push/appgroup') else '' }}">
@@ -276,6 +242,65 @@
                         <a href="{{ url_for('push.function') }}"
                            class="{{ 'sub-active' if request.path.startswith('/push/function') else '' }}">
                             <span class="am-icon-angle-right sidebar-nav-link-logo"></span> 新建应用功能分类
+                        </a>
+                    </li>
+                </ul>
+            </li>
+
+            <li class="sidebar-nav-link">
+                <a href="javascript:;"
+                   class="sidebar-nav-sub-title {{ 'active' if request.path.startswith('/file') else '' }}">
+                    <i class="am-icon-files-o sidebar-nav-link-logo"></i> 文件组
+                    <span class="am-icon-chevron-up am-fr am-margin-right-sm sidebar-nav-sub-ico"></span>
+                </a>
+                <ul class="sidebar-nav sidebar-nav-sub am-collapse am-in">
+                    <li class="sidebar-nav-link">
+                        <a href="{{ url_for('file.filegroup') }}"
+                           class="{{ 'sub-active' if request.path.startswith('/file/filegroup') else '' }}">
+                            <span class="am-icon-angle-right sidebar-nav-link-logo"></span> 管理文件组
+                        </a>
+                    </li>
+
+                    <li class="sidebar-nav-link">
+                        <a href="{{ url_for('file.upload') }}"
+                           class="{{ 'sub-active' if request.path.startswith('/file/upload') else '' }}">
+                            <span class="am-icon-angle-right sidebar-nav-link-logo"></span> 上传文件
+                        </a>
+                    </li>
+                </ul>
+            </li>
+
+            <li class="sidebar-nav-link">
+                <a href="javascript:;"
+                   class="sidebar-nav-sub-title {{ 'active' if request.path.startswith('/monitor') else '' }}">
+                    <i class="am-icon-tachometer sidebar-nav-link-logo"></i> 云监控
+                    <span class="{{ 'am-icon-chevron-up' if request.path.startswith('/monitor') else 'am-icon-chevron-down' }} am-fr am-margin-right-sm sidebar-nav-sub-ico"></span>
+                </a>
+                <ul class="sidebar-nav sidebar-nav-sub am-collapse {{ 'am-in' if request.path.startswith('/monitor') else '' }}">
+                    <!--<li class="sidebar-nav-link">
+                        <a href="table-list.html">
+                            <span class="am-icon-angle-right sidebar-nav-link-logo"></span> 小云列表
+                        </a>
+                    </li>-->
+
+                    <li class="sidebar-nav-link">
+                        <a href="{{ url_for('monitor.info') }}"
+                           class="{{ 'sub-active' if request.path.startswith('/monitor/info') else '' }}">
+                            <span class="am-icon-angle-right sidebar-nav-link-logo"></span> 监控总览
+                        </a>
+                    </li>
+
+                    <li class="sidebar-nav-link">
+                        <a href="{{ url_for('monitor.channel') }}"
+                           class="{{ 'sub-active' if request.path.startswith('/monitor/channel') else '' }}">
+                            <span class="am-icon-angle-right sidebar-nav-link-logo"></span> 信道监控
+                        </a>
+                    </li>
+
+                    <li class="sidebar-nav-link">
+                        <a href="{{ url_for('monitor.log') }}"
+                           class="{{ 'sub-active' if request.path.startswith('/monitor/log') else '' }}">
+                            <span class="am-icon-angle-right sidebar-nav-link-logo"></span> 日志详情
                         </a>
                     </li>
                 </ul>
