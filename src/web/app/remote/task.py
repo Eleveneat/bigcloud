@@ -6,7 +6,7 @@
 import json
 
 from .. import logger
-from ..models import LittleCloud, Application
+from ..models import LittleCloud, Application, File
 from ..common.singleton import Singleton
 from .message import MessageType, ReceiveMessage, ResponseCode, ResponseMessage
 from .. import upload
@@ -158,4 +158,65 @@ class DownloadAppTask(BaseTask):
             return ResponseMessage.create(message_type=MessageType.DOWNLOAD_APP, result=ResponseCode.FAIL)
 
         return ResponseMessage.create(message_type=MessageType.DOWNLOAD_APP, message=data,
+                                      result=ResponseCode.SUCCESS)
+
+
+class SyncFileGroupTask(BaseTask):
+    @classmethod
+    def process(cls, param, cloud_id):
+        try:
+            little_cloud = LittleCloud.query.get(int(cloud_id))
+            # 检查小云是否已接入
+            if not little_cloud.is_connected:
+                return ResponseMessage.create(message_type=MessageType.SYNC_FILE_GROUP, result=ResponseCode.FAIL)
+
+            data = []
+            all_groups = little_cloud.filegroups
+            for group in all_groups:
+                all_files = group.files
+                all_files_info = []
+                for file in all_files:
+                    file_info = {
+                        'filename': file.filename,
+                        'size': file.size,
+                        'md5': file.md5,
+                    }
+                    all_files_info.append(file_info)
+                group_info = {
+                    'name': group.name,
+                    'description': group.description,
+                    'files': all_files_info,
+                }
+                data.append(group_info)
+        except Exception as e:
+            logger.error('SyncFileGroupTask error')
+            return ResponseMessage.create(message_type=MessageType.SYNC_FILE_GROUP, result=ResponseCode.FAIL)
+
+        return ResponseMessage.create(message_type=MessageType.SYNC_FILE_GROUP, message=data,
+                                      result=ResponseCode.SUCCESS)
+
+
+class DownloadFileTask(BaseTask):
+    @classmethod
+    def process(cls, param, cloud_id):
+        try:
+            little_cloud = LittleCloud.query.get(int(cloud_id))
+            # 检查小云是否已接入
+            if not little_cloud.is_connected:
+                return ResponseMessage.create(message_type=MessageType.DOWNLOAD_FILE, result=ResponseCode.FAIL)
+
+            data = []
+            files_info = param
+            for file_info in files_info:
+                filename = file_info["filename"]
+                file = File.query.filter_by(filename=filename).first()
+                if file:
+                    filename = file.filename
+                    data.append({"filename": filename, "url": upload.url(filename)})
+
+        except Exception as e:
+            logger.error('DownloadFileTask error')
+            return ResponseMessage.create(message_type=MessageType.DOWNLOAD_FILE, result=ResponseCode.FAIL)
+
+        return ResponseMessage.create(message_type=MessageType.DOWNLOAD_FILE, message=data,
                                       result=ResponseCode.SUCCESS)

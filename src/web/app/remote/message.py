@@ -11,13 +11,17 @@ class MessageType(object):
     CONNECT = 'connect'
     SYNC_APP_GROUP = 'sync_app_group'
     DOWNLOAD_APP = 'download_app'
+    SYNC_FILE_GROUP = 'sync_file_group'
+    DOWNLOAD_FILE = 'download_file'
 
 
 class ReceiveMessage(object):
     SUPPORT = [
         MessageType.CONNECT,
         MessageType.SYNC_APP_GROUP,
-        MessageType.DOWNLOAD_APP
+        MessageType.DOWNLOAD_APP,
+        MessageType.SYNC_FILE_GROUP,
+        MessageType.DOWNLOAD_FILE,
     ]
 
     @classmethod

@@ -214,7 +214,6 @@ def update_groups_of_littlecloud(id):
                     appgroups.append(appgroup)
 
             filegroups_id = form.filegroups.raw_data
-            print(filegroups_id)
             filegroups = []
             for filegourp_id in filegroups_id:
                 filegroup = FileGroup.query.get(int(filegourp_id))
