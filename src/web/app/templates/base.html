@@ -27,7 +27,7 @@
     <header>
         <!-- logo -->
         <div class="am-fl tpl-header-logo">
-            <h1 style="color: white;margin-top: 8px;">大云管理系统</h1>
+            <h1 style="color: white;margin-top: 8px;">大云管理平台</h1>
             <!--<a href="javascript:;"><img src="assets/img/logo.png" alt=""></a>-->
         </div>
         <!-- 右侧内容 -->
@@ -50,7 +50,8 @@
                 <ul>
                     <!-- 欢迎语 -->
                     <li class="am-text-sm tpl-header-navbar-welcome">
-                        <a href="javascript:;">欢迎您, <span>{{ current_user.name }}</span> </a>
+{#                        <a href="javascript:;">欢迎您, <span>{{ current_user.name }}</span> </a>#}
+                        <a href="javascript:;">欢迎您, <span>陈炜健</span> </a>
                     </li>
 
                     <!-- 新邮件 -->
@@ -198,14 +199,14 @@
             <li class="sidebar-nav-link">
                 <a href="{{ url_for('connect.index') }}"
                    class="{{ 'active' if request.path.startswith('/connect') else '' }}">
-                    <i class="am-icon-cloud sidebar-nav-link-logo"></i> 云接入
+                    <i class="am-icon-cloud sidebar-nav-link-logo"></i> 小云接入
                 </a>
             </li>
 
             <li class="sidebar-nav-link">
                 <a href="{{ url_for('push.index') }}"
                    class="{{ 'active' if request.path.startswith('/push/littlecloud') else '' }}">
-                    <i class="am-icon-mixcloud sidebar-nav-link-logo"></i> 云推送
+                    <i class="am-icon-mixcloud sidebar-nav-link-logo"></i> 小云推送
                 </a>
             </li>
 
@@ -270,41 +271,41 @@
                 </ul>
             </li>
 
-            <li class="sidebar-nav-link">
-                <a href="javascript:;"
-                   class="sidebar-nav-sub-title {{ 'active' if request.path.startswith('/monitor') else '' }}">
-                    <i class="am-icon-tachometer sidebar-nav-link-logo"></i> 云监控
-                    <span class="{{ 'am-icon-chevron-up' if request.path.startswith('/monitor') else 'am-icon-chevron-down' }} am-fr am-margin-right-sm sidebar-nav-sub-ico"></span>
-                </a>
-                <ul class="sidebar-nav sidebar-nav-sub am-collapse {{ 'am-in' if request.path.startswith('/monitor') else '' }}">
-                    <!--<li class="sidebar-nav-link">
-                        <a href="table-list.html">
-                            <span class="am-icon-angle-right sidebar-nav-link-logo"></span> 小云列表
-                        </a>
-                    </li>-->
-
-                    <li class="sidebar-nav-link">
-                        <a href="{{ url_for('monitor.info') }}"
-                           class="{{ 'sub-active' if request.path.startswith('/monitor/info') else '' }}">
-                            <span class="am-icon-angle-right sidebar-nav-link-logo"></span> 监控总览
-                        </a>
-                    </li>
-
-                    <li class="sidebar-nav-link">
-                        <a href="{{ url_for('monitor.channel') }}"
-                           class="{{ 'sub-active' if request.path.startswith('/monitor/channel') else '' }}">
-                            <span class="am-icon-angle-right sidebar-nav-link-logo"></span> 信道监控
-                        </a>
-                    </li>
-
-                    <li class="sidebar-nav-link">
-                        <a href="{{ url_for('monitor.log') }}"
-                           class="{{ 'sub-active' if request.path.startswith('/monitor/log') else '' }}">
-                            <span class="am-icon-angle-right sidebar-nav-link-logo"></span> 日志详情
-                        </a>
-                    </li>
-                </ul>
-            </li>
+{#            <li class="sidebar-nav-link">#}
+{#                <a href="javascript:;"#}
+{#                   class="sidebar-nav-sub-title {{ 'active' if request.path.startswith('/monitor') else '' }}">#}
+{#                    <i class="am-icon-tachometer sidebar-nav-link-logo"></i> 云监控#}
+{#                    <span class="{{ 'am-icon-chevron-up' if request.path.startswith('/monitor') else 'am-icon-chevron-down' }} am-fr am-margin-right-sm sidebar-nav-sub-ico"></span>#}
+{#                </a>#}
+{#                <ul class="sidebar-nav sidebar-nav-sub am-collapse {{ 'am-in' if request.path.startswith('/monitor') else '' }}">#}
+{#                    <!--<li class="sidebar-nav-link">#}
+{#                        <a href="table-list.html">#}
+{#                            <span class="am-icon-angle-right sidebar-nav-link-logo"></span> 小云列表#}
+{#                        </a>#}
+{#                    </li>-->#}
+{##}
+{#                    <li class="sidebar-nav-link">#}
+{#                        <a href="{{ url_for('monitor.info') }}"#}
+{#                           class="{{ 'sub-active' if request.path.startswith('/monitor/info') else '' }}">#}
+{#                            <span class="am-icon-angle-right sidebar-nav-link-logo"></span> 监控总览#}
+{#                        </a>#}
+{#                    </li>#}
+{##}
+{#                    <li class="sidebar-nav-link">#}
+{#                        <a href="{{ url_for('monitor.channel') }}"#}
+{#                           class="{{ 'sub-active' if request.path.startswith('/monitor/channel') else '' }}">#}
+{#                            <span class="am-icon-angle-right sidebar-nav-link-logo"></span> 信道监控#}
+{#                        </a>#}
+{#                    </li>#}
+{##}
+{#                    <li class="sidebar-nav-link">#}
+{#                        <a href="{{ url_for('monitor.log') }}"#}
+{#                           class="{{ 'sub-active' if request.path.startswith('/monitor/log') else '' }}">#}
+{#                            <span class="am-icon-angle-right sidebar-nav-link-logo"></span> 日志详情#}
+{#                        </a>#}
+{#                    </li>#}
+{#                </ul>#}
+{#            </li>#}
 
             <li class="sidebar-nav-link">
                 <a href="{{ url_for('user.index') }}"
